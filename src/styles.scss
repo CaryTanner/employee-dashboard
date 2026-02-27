@@ -1,1 +1,25 @@
-/* You can add global styles to this file, and also import other style files */
+@use 'tailwindcss';
+
+@theme {
+  --font-display: 'Inter', ui-sans-serif, sans-serif;
+  --font-body: 'Source Sans Pro', ui-sans-serif, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply text-gray-950;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display;
+  }
+
+  p {
+    @apply font-body;
+  }
+}
