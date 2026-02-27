@@ -1,33 +1,49 @@
-<div class="flex flex-col items-center min-h-screen bg-gray-50 py-10 px-4 sm:px-0">
+<div class="flex flex-col items-center min-h-screen bg-gray-50 py-10 px-4 sm:px-0" aria-live="polite" aria-atomic="true">
   <h1 class="text-3xl font-bold mb-10">Medarbetaruppgifter</h1>
 
-  <div class="w-full max-w-lg mb-8">
-    <div class="flex flex-col bg-white rounded-md border border-gray-300 shadow-sm p-6">
-      <div class="flex items-center gap-4 mb-4">
-        <app-employee-avatar [employeeName]="employee()?.employee_name" />
-        <h2 class="text-xl font-semibold text-gray-900">{{ employee()?.employee_name }}</h2>
+  @if (employeeResource.isLoading()) {
+    <p class="text-gray-950 mt-14 mb-48">Laddar medarbetareuppgifter...</p>
+  } @else if (employeeResource.error()) {
+    <p class="text-gray-950 mt-14 mb-48">
+      Det går inte att hämta data just nu, vänligen försök igen om en stund.
+    </p>
+  } @else {
+    @let employee = employeeResource.value();
+    @if (!employee?.id) {
+      <p class="text-gray-950 mt-14 mb-48">Ingen medarbetare hittades.</p>
+    } @else {
+      <div class="w-full max-w-lg">
+        <div class="flex flex-col bg-white rounded-md border border-gray-300 shadow-sm p-6">
+          <div class="flex items-center gap-4 mb-4">
+            <app-employee-avatar [employeeName]="employee?.employee_name" />
+            <h2 class="text-xl font-semibold text-gray-900">{{ employee?.employee_name }}</h2>
+          </div>
+          <dl class="w-full divide-y divide-gray-200 text-base">
+            <div class="grid grid-cols-3 gap-4 py-3">
+              <dt class="font-semibold text-gray-700 text-lg">Namn</dt>
+              <dd class="text-gray-900 sm:col-span-2 text-lg">
+                {{ employee?.employee_name ?? '-' }}
+              </dd>
+            </div>
+            <div class="grid grid-cols-3 gap-4 py-3">
+              <dt class="font-semibold text-gray-700 text-lg">Lön</dt>
+              <dd class="text-gray-900 sm:col-span-2 text-lg">
+                {{ employee?.employee_salary ?? '-' }}
+              </dd>
+            </div>
+            <div class="grid grid-cols-3 gap-4 py-3">
+              <dt class="font-semibold text-gray-700 text-lg">Ålder</dt>
+              <dd class="text-gray-900 sm:col-span-2 text-lg">
+                {{ employee?.employee_age ?? '-' }}
+              </dd>
+            </div>
+          </dl>
+        </div>
       </div>
-      <dl class="w-full divide-y divide-gray-200 text-base">
-        <div class="grid grid-cols-3 gap-4 py-3">
-          <dt class="font-semibold text-gray-700 text-lg">Namn</dt>
-          <dd class="text-gray-900 sm:col-span-2 text-lg">
-            {{ employee()?.employee_name ?? '-' }}
-          </dd>
-        </div>
-        <div class="grid grid-cols-3 gap-4 py-3">
-          <dt class="font-semibold text-gray-700 text-lg">Lön</dt>
-          <dd class="text-gray-900 sm:col-span-2 text-lg">
-            {{ employee()?.employee_salary ?? '-' }}
-          </dd>
-        </div>
-        <div class="grid grid-cols-3 gap-4 py-3">
-          <dt class="font-semibold text-gray-700 text-lg">Ålder</dt>
-          <dd class="text-gray-900 sm:col-span-2 text-lg">{{ employee()?.employee_age ?? '-' }}</dd>
-        </div>
-      </dl>
-    </div>
-  </div>
-  <app-link-button [link]="'/'" [ariaLabelText]="'Tillbaka till anställdslistan'">
+    }
+  }
+
+  <app-link-button class="mt-8" [link]="'/'" [ariaLabelText]="'Tillbaka till anställdslistan'">
     ← Tillbaka
   </app-link-button>
 </div>

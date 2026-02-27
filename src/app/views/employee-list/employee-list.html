@@ -1,10 +1,27 @@
 <div class="flex flex-col items-center min-h-screen bg-gray-50 py-10 px-4 sm:px-0">
   <h1 class="text-3xl font-bold mb-10">Anställdslista</h1>
-  <ul class="flex flex-col items-center gap-6 w-full max-w-lg" aria-label="Anställdskort lista">
-    @for (employee of list(); track employee.id) {
-      <li class="w-full">
-        <app-list-card [employee]="employee" />
-      </li>
+  <div aria-live="polite" aria-atomic="true">
+    @if (employeesResource.isLoading()) {
+      <p class="text-gray-950">Laddar anställda...</p>
+    } @else if (employeesResource.error()) {
+      <p class="text-gray-950">
+        Det går inte att hämta data just nu, vänligen försök igen om en stund.
+      </p>
+    } @else {
+      @if (employeesResource.value()?.length === 0) {
+        <p class="text-gray-950">Inga anställda hittades.</p>
+      } @else {
+        <ul
+          class="flex flex-col items-center gap-6 w-full max-w-lg"
+          aria-label="Anställdskort lista"
+        >
+          @for (employee of employeesResource.value(); track employee.id) {
+            <li class="w-full">
+              <app-list-card [employee]="employee" />
+            </li>
+          }
+        </ul>
+      }
     }
-  </ul>
+  </div>
 </div>
