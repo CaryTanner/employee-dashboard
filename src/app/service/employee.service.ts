@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable, map, shareReplay } from 'rxjs';
+import { Observable, catchError, map, shareReplay, throwError } from 'rxjs';
 import {
   Employee,
   EmployeeListResponseSchema,
@@ -23,10 +23,14 @@ export class EmployeeService {
         map((response) => {
           const result = EmployeeListResponseSchema.safeParse(response);
           if (!result.success) {
-            this.employeesCache$ = null; // if error on fetch, null cache to retry on next request
+            this.employeesCache$ = null;
             throw new Error('Invalid API response');
           }
           return result.data.data;
+        }),
+        catchError((err) => {
+          this.employeesCache$ = null;
+          return throwError(() => err);
         }),
         shareReplay({ bufferSize: 1, refCount: false }),
       );

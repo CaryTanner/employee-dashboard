@@ -4,24 +4,31 @@
     @if (employeesResource.isLoading()) {
       <p class="text-gray-950">Laddar anställda...</p>
     } @else if (employeesResource.error()) {
-      <p class="text-gray-950">
-        Det går inte att hämta data just nu, vänligen försök igen om en stund.
-      </p>
+      <div class="flex flex-col items-center gap-6 w-full max-w-lg">
+        <p class="text-gray-950 mt-10">
+          Det går inte att hämta data just nu, vänligen försök igen om en stund.
+        </p>
+        <button class="mt-6 mx-auto" type="button" (click)="employeesResource.reload()">Ladda om</button>
+      </div>
     } @else {
-      @if (employeesResource.value()?.length === 0) {
-        <p class="text-gray-950">Inga anställda hittades.</p>
-      } @else {
-        <ul
-          class="flex flex-col items-center gap-6 w-full max-w-lg"
-          aria-label="Anställdskort lista"
-        >
-          @for (employee of employeesResource.value(); track employee.id) {
-            <li class="w-full">
-              <app-list-card [employee]="employee" />
-            </li>
-          }
-        </ul>
-      }
+      <div class="w-xs sm:w-sm text-center">
+        <app-search-input [form]="form" />
+
+        @if (employeesResource.value()?.length === 0) {
+          <p class="text-gray-950 mt-16">Inga anställda hittades.</p>
+        } @else {
+          <ul
+            class="flex flex-col items-center gap-6 w-full max-w-lg"
+            aria-label="Anställdskort lista"
+          >
+            @for (employee of employeesResource.value(); track employee.id) {
+              <li class="w-full">
+                <app-list-card [employee]="employee" />
+              </li>
+            }
+          </ul>
+        }
+      </div>
     }
   </div>
 </div>

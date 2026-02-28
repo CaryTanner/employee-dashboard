@@ -8,6 +8,12 @@
 @layer base {
   body {
     @apply text-gray-950;
+    :focus-visible {
+      @apply focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-600;
+    }
+    button {
+      @apply mb-6 self-start rounded border border-indigo-700 bg-white px-4 py-2 text-sm font-medium text-indigo-700 hover:bg-indigo-50 transition cursor-pointer;
+    }
   }
 
   h1,
